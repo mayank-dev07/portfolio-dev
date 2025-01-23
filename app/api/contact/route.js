@@ -14,9 +14,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-console.log("Email Address:", process.env.EMAIL_ADDRESS);
-console.log("Gmail Passkey:", process.env.GMAIL_PASSKEY);
-
 const generateEmailTemplate = (name, email, userMessage) => `
   <div style="font-family: Arial, sans-serif; color: #333; padding: 20px; background-color: #f4f4f4;">
     <div style="max-width: 600px; margin: auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
@@ -44,8 +41,6 @@ async function sendEmail(payload, message) {
     replyTo: email,
   };
 
-  console.log("Mail Options:", mailOptions);
-
   try {
     await transporter.sendMail(mailOptions);
     return true;
@@ -62,11 +57,7 @@ export async function POST(request) {
 
     const message = `New message from ${name}\n\nEmail: ${email}\n\nMessage:\n\n${userMessage}\n\n`;
 
-    console.log("Message:", message);
-
     const emailSuccess = await sendEmail(payload, message);
-
-    console.log("Email Success:", emailSuccess);
 
     if (emailSuccess) {
       return NextResponse.json(
